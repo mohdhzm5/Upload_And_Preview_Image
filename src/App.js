@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import React, { useState } from 'react'
+const App = () => {
+const [image, setImage ] = useState("");
+const [ url, setUrl ] = useState("");
+const uploadImage = () => {
+const data = new FormData()
+data.append("file", image)
+data.append("upload_preset", "tutorial")
+data.append("cloud_name","breellz")
+fetch("  https://api.cloudinary.com/v1_1/breellz/image/upload",{
+method:"post",
+body: data
+})
+.then(resp => resp.json())
+.then(data => {
+setUrl(data.url)
+})
+.catch(err => console.log(err))
+}
+return (
+<div>
+<div>
+<input type="file" onChange= {(e)=> setImage(e.target.files[0])}></input>
+<button onClick={uploadImage}>Upload</button>
+</div>
+<div>
+<h1>Uploaded Image is below</h1>
+<img src={url}/>
+</div>
+</div>
+)
 }
 
 export default App;
